@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Exemplo</title>
+</head>
+<body>
+    <h1>Dados da API</h1>
+    <!-- Input para inserir o ID da venda -->
+    <label for="idVenda">ID da Venda:</label>
+    <input type="text" id="idVenda" name="idVenda">
+    <button onclick="buscarVenda()">Buscar</button>
+
+    <!-- Div para exibir os dados da API -->
+    <div id="dados"></div>
+
+    <script>
+        function buscarVenda() {
+            // Obter o valor do ID da venda do input
+            const idVenda = document.getElementById('idVenda').value;
+
+            // Construir a URL da API com o ID da venda
+            const urlDaAPI = `http://localhost:8000/exemplo_post/${idVenda}`;
+
+            // Fazer uma solicitação GET para a API
+            fetch(urlDaAPI)
+                .then(response => response.json())
+                .then(data => {
+                    // Manipular os dados recebidos e exibi-los na página
+                    const dadosDiv = document.getElementById('dados');
+                    dadosDiv.innerHTML = '<pre>' + JSON.stringify(data,null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    console.error('Erro ao fazer solicitação:', error);
+                    alert('Erro ao fazer solicitação: ' + error.message);
+                });
+        }
+    </script>
+</body>
+</html>

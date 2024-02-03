@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar POST para API</title>
+<style>
+    #postForm{
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 10px;
+    }
+    label{
+        margin: 10px;
+    }
+    input#inp2{
+        margin: 10px;
+    }
+    input#inp{
+        margin-left: 20px;
+    }
+</style>
+</head>
+<body>
+    <h1>Enviar POST para API</h1>
+    <form id="postForm">
+        <label for="inp">Input :</label>
+        <input type="text" id="inp" name="inp">
+        <br>
+        <label for="inp2">Input 2:</label>
+        <input type="text" id="inp2" name="inp2">
+        <br>
+        <button type="button" onclick="enviarPost()">Enviar</button>
+    </form>
+
+    <script>
+        function enviarPost() {
+            const inpValue = document.getElementById("inp").value;
+            const inp2Value = document.getElementById("inp2").value;
+
+            // Construindo o objeto de dados a ser enviado
+            const data = {
+                inp: inpValue,
+                inp2: inp2Value
+            };
+
+            // Enviando a solicitação POST usando fetch API
+            fetch('http://localhost:8000/exemplo_2', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+
+            .then(response => response.text())
+            .then(data => {
+                console.log('Resposta da API:', data);
+                alert('Resposta da API: ' + data);
+            })
+            .catch(error => {
+                console.error('Erro ao enviar POST:', error);
+                alert('Erro ao enviar POST: ' + error.message);
+            });
+        }
+    </script>
+</body>
+</html>
