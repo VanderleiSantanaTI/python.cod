@@ -26,6 +26,7 @@ app.add_middleware(
 class Inputs(BaseModel):
     inp: int
     inp2: str
+    email: str
 
 
 
@@ -48,7 +49,7 @@ def ids_disponiveis():
 @app.get("/exemplo_get")
 def exemplo():
     # criar uma lista de dicionário
-    lista_de_dicionarios = [{"id": item[0], "nome": item[1]} for item in vendas]
+    lista_de_dicionarios = [{"id": item[0], "nome": item[1], "email":item[2]} for item in vendas]
     return lista_de_dicionarios
 
 # criar o caminho da página para GET
@@ -62,13 +63,13 @@ def exemplo(id_venda:int):
 def exemplo_2(inputs: Inputs):
     # ...
     print(inputs.inp2)
-    vendas.append((inputs.inp, inputs.inp2))
+    vendas.append((inputs.inp, inputs.inp2, inputs.email))
     #vendas.append(inputs.inp)
-    if (inputs.inp2).lower() == "oi":
+    if (inputs.inp2).lower() == "vanderlei":
         print("concedido")
     else:
         print("Não concedido")    
-    return inputs.inp, inputs.inp2
+    return inputs.inp, inputs.inp2, inputs.email
 
 
 @app.delete("/exemplo_get/{id_venda}")
