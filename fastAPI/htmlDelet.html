@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Page</title>
+    <style>
+        /* Estilo para aumentar a largura do combobox */
+        select {
+            width: 200px; /* Defina a largura desejada aqui */
+        }
+    </style>
+</head>
+<body>
+    <h1>Delete Value</h1>
+    <form id="deleteForm">
+        <label for="id_venda">Selecione o ID da venda a ser deletada:</label>
+        <select id="id_venda" name="id_venda">
+            
+            <script>
+                async function preencherCombobox() {
+                    const response = await fetch('http://localhost:8000/ids_disponiveis');
+                    const data = await response.json();
+                    const selectElement = document.getElementById('id_venda');
+                    // Limpar as opções atuais
+                    selectElement.innerHTML = '';
+                    // Adicionar as novas opções
+                    data.forEach(id => {
+                        const option = document.createElement('option');
+                        option.value = id;
+                        option.text = id;
+                        selectElement.appendChild(option);
+                    });
+                }
+            
+                async function deleteValue() {
+                    const idVenda = document.getElementById('id_venda').value;
+                    const response = await fetch(`http://localhost:8000/exemplo_get/${idVenda}`, {
+                        method: 'DELETE'
+                    });
+            
+                    if (response.ok) {
+                        alert('Valor deletado com sucesso!');
+                        preencherCombobox(); // Atualiza o combobox após a exclusão
+                    } else {
+                        alert('Erro ao deletar valor!');
+                    }
+                }
+            
+                // Chamar a função preencherCombobox() ao carregar a página
+                window.onload = preencherCombobox;
+            </script>
+            
+            </select>
+
+        
+        <button type="button" onclick="deleteValue()">Deletar</button>
+    </form>
+
+    <script>
+        async function deleteValue() {
+            const idVenda = document.getElementById('id_venda').value;
+            const response = await fetch(`http://localhost:8000/exemplo_get/${idVenda}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                alert('Valor deletado com sucesso!');
+                // Você pode atualizar a lista de opções aqui se desejar
+            } else {
+                alert('Erro ao deletar valor!');
+            }
+        }
+    </script>
+</body>
+</html>

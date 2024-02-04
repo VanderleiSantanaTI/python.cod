@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 vendas = []
+
 # Adicione o middleware CORS
 app.add_middleware(
     CORSMiddleware,
@@ -34,10 +35,30 @@ def exemplo():
     return "Olá Mundo!"
 
 
+# criar o caminho da página para GET todos os IDs disponíveis
+@app.get("/ids_disponiveis")
+def ids_disponiveis():
+    return [item[0] for item in vendas]
+
+
+
+
+
+# criar o caminho da página para GET
+@app.get("/exemplo_get")
+def exemplo():
+    # criar uma lista de dicionário
+    lista_de_dicionarios = [{"id": item[0], "nome": item[1]} for item in vendas]
+    return lista_de_dicionarios
+
+# criar o caminho da página para GET
+@app.get("/exemplo_get/{id_venda}")
+def exemplo(id_venda:int):
+    return vendas[id_venda]
 
 
 # criar o caminho da página para POST
-@app.post("/exemplo_2")
+@app.post("/exemplo_post")
 def exemplo_2(inputs: Inputs):
     # ...
     print(inputs.inp2)
@@ -50,18 +71,13 @@ def exemplo_2(inputs: Inputs):
     return inputs.inp, inputs.inp2
 
 
-# criar o caminho da página para GET
-@app.get("/exemplo_post")
-def exemplo():
-    # criar uma lista de  dicionário
-    lista_de_dicionarios = [{"id": item[0], "nome": item[1]} for item in vendas]
-    return lista_de_dicionarios
-
-# criar o caminho da página para GET
-@app.get("/exemplo_post/{id_venda}")
-def exemplo(id_venda:int):
-    return vendas[id_venda]
-
+@app.delete("/exemplo_get/{id_venda}")
+def delete_value(id_venda: int):
+    try:
+        vendas.pop(id_venda)
+        return {"message": "Valor excluído com sucesso"}
+    except IndexError:
+        return {"error": "ID de venda não encontrado"}
 
 # inicia se for pela principal
 if __name__ == "__main__":

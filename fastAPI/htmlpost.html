@@ -44,13 +44,16 @@
             };
 
             // Enviando a solicitação POST usando fetch API
-            fetch('http://localhost:8000/exemplo_2', {
+            fetch('http://localhost:8000/exemplo_post', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             })
 
             .then(response => response.text())
             .then(data => {
+                // Limpar os campos de entrada após o envio bem-sucedido
+                document.getElementById("inp").value = '';
+                document.getElementById("inp2").value = '';
                 console.log('Resposta da API:', data);
                 alert('Resposta da API: ' + data);
             })

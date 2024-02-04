@@ -19,7 +19,7 @@ def home():
 
 
 @app.get("/vendas/{id_venda}")
-def pegar_venda(id_venda : int):
+def pegar_venda(id_venda: int):
     return vendas[id_venda]
 
 
