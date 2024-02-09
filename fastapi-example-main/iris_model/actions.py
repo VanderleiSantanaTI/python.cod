@@ -26,8 +26,8 @@ def init_db(cursor: sqlite3.Cursor) -> None:
 def write_features_to_db(
         cursor: sqlite3.Cursor, 
         features: Features, 
-        connection: Optional[sqlite3.Connection] = None
-    ) -> None:
+        connection: Optional[sqlite3.Connection] = None) -> None:
+
     connection = _connection or connection
     if not connection:
         raise ValueError("you must define a sqlite connection")
