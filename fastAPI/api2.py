@@ -1,3 +1,8 @@
+'''
+"uvicorn api2:app --reload"  => para fazer uma alteração  sem precizar reniciar o servidor.
+outra forma é criar um arquivo dev.sh depois colocor no arquivo o    "uvicorn api2:app --reload" aí quando for acionar é só digitar no terminal :  sh dev.sh e iniciará a mesma coisa
+'''
+
 from fastapi import FastAPI
 import uvicorn
 
@@ -8,7 +13,7 @@ vendas = {
     1: {"item": "lata", "preco_unitario": 4, "quantidade":5},
     2: {"item": "darrafa 2L", "preco_unitario": 15, "quantidade":5},
     3: {"item": "garrafa 750ml", "preco_unitario": 10, "quantidade":5},
-    4: {"item": "lata mini", "preco_unitario": 2, "quantidade": 5},
+    4: {"item": "lata mini", "preco_unitario": 5, "quantidade": 5},
 }
 
 
