@@ -25,7 +25,12 @@
 
             // Fazer uma solicitação GET para a API
             fetch(urlDaAPI)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao fazer solicitação: ' + response.status);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     // Manipular os dados recebidos e exibi-los na página
                     const dadosDiv = document.getElementById('dados');
@@ -33,7 +38,7 @@
                 })
                 .catch(error => {
                     console.error('Erro ao fazer solicitação:', error);
-                    alert('Erro ao fazer solicitação: ' + error.message);
+                    alert(error.message);
                 });
         }
     </script>

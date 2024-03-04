@@ -23,28 +23,37 @@
 <body>
     <h1>Enviar POST para API</h1>
     <form id="postForm">
-        <label for="inp">Input :</label>
-        <input type="text" id="inp" name="inp">
+        <label for="id">Id :</label>
+        <input type="text" id="id" name="id">
         <br>
-        <label for="inp2">Input 2:</label>
-        <input type="text" id="inp2" name="inp2">
+        <br>
+        <label for="nome">Nome :</label>
+        <input type="text" id="nome" name="nome">
+        <br>
+        <br>
+        <label for="email">E-mail :</label>
+        <input type="text" id="email" name="email">
+        <br>
         <br>
         <button type="button" onclick="enviarPost()">Enviar</button>
     </form>
 
     <script>
         function enviarPost() {
-            const inpValue = document.getElementById("inp").value;
-            const inp2Value = document.getElementById("inp2").value;
+            const idValue = document.getElementById("id").value;
+            const nomeValue = document.getElementById("nome").value;
+            const emailValue = document.getElementById("email").value;
 
             // Construindo o objeto de dados a ser enviado
             const data = {
-                inp: inpValue,
-                inp2: inp2Value
+                id: idValue,
+                nome: nomeValue,
+                email: emailValue
+
             };
 
             // Enviando a solicitação POST usando fetch API
-            fetch('http://localhost:8000/exemplo_post', {
+            fetch('http://127.0.0.1:8000/exemplo_post', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             })
@@ -52,8 +61,9 @@
             .then(response => response.text())
             .then(data => {
                 // Limpar os campos de entrada após o envio bem-sucedido
-                document.getElementById("inp").value = '';
-                document.getElementById("inp2").value = '';
+                document.getElementById("id").value = '';
+                document.getElementById("nome").value = '';
+                document.getElementById("email").value = '';
                 console.log('Resposta da API:', data);
                 alert('Resposta da API: ' + data);
             })

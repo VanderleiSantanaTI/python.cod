@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <table id="tabelaVendas">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Item</th>
+                <th>Preço Unitário</th>
+                <th>Quantidade</th>
+            </tr>
+        </thead>
+        <tbody id="corpoTabela"></tbody>
+    </table>
+
+    <script>
+        // Função para preencher a tabela com os dados das vendas
+        async function preencherTabela() {
+            const response = await fetch('http://localhost:8000/item');
+            const data = await response.json();
+            const corpoTabela = document.getElementById('corpoTabela');
+            data.vendas.forEach(venda => {
+                const row = `<tr>
+                    <td>${venda[0]}</td>
+                    <td>${venda[1]}</td>
+                    <td>${venda[2]}</td>
+                    <td>${venda[3]}</td>
+                </tr>`;
+                corpoTabela.innerHTML += row;
+            });
+        }
+
+        // Chama a função ao carregar a página
+        preencherTabela();
+    </script>
+</body>
+</html>

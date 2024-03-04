@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic API Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: #fff;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+        }
+        input[type="submit"], button, input[type="button"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover, button:hover, input[type="button"]:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #555;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Futuristic API Interface</h1>
+        <h2>POST</h2>
+        <form id="postForm">
+            <input type="text" id="id" placeholder="ID">
+            <input type="text" id="nome" placeholder="Nome">
+            <input type="email" id="email" placeholder="Email">
+            <input type="submit" value="Enviar">
+        </form>
+        <h2>GET Todos</h2>
+        <button id="getAllButton">Consultar Todos</button>
+        <table id="getAllTable" class="output"></table>
+        <h2>GET por ID</h2>
+        <form id="getByIdForm">
+            <input type="text" id="idGet" placeholder="ID">
+            <button type="button" id="getByIdButton">Consultar</button>
+        </form>
+        <table id="getByIdTable" class="output"></table>
+        <h2>DELETE por ID</h2>
+        <form id="deleteForm">
+            <input type="text" id="idDelete" placeholder="ID">
+            <button type="button" id="deleteButton">Excluir</button>
+        </form>
+        <div id="deleteOutput" class="output"></div>
+    </div>
+    <script>
+        const apiUrl = 'http://localhost:8000';
+    
+        // Função para enviar um POST
+        document.getElementById('postForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const id = document.getElementById('id').value;
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            await fetch(apiUrl + '/exemplo_post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id, nome, email })
+            });
+            alert('POST enviado com sucesso!');
+            // Limpa os campos após o POST
+            document.getElementById('id').value = '';
+            document.getElementById('nome').value = '';
+            document.getElementById('email').value = '';
+        });
+    
+        // Função para consultar todos os dados
+        document.getElementById('getAllButton').addEventListener('click', async function() {
+            const response = await fetch(apiUrl + '/exemplo_get');
+            const data = await response.json();
+            const table = document.getElementById('getAllTable');
+            renderTable(table, data);
+        });
+    
+        // Função para consultar por ID
+        document.getElementById('getByIdButton').addEventListener('click', async function() {
+            const id = document.getElementById('idGet').value;
+            const response = await fetch(apiUrl + '/exemplo_get/' + id);
+            const data = await response.json();
+            const table = document.getElementById('getByIdTable');
+            renderTable(table, [data]);
+        });
+    
+        // Função para excluir por ID
+        document.getElementById('deleteButton').addEventListener('click', async function() {
+            const id = document.getElementById('idDelete').value;
+            const response = await fetch(apiUrl + '/exemplo_del/' + id, {
+                method: 'DELETE'
+            });
+            const data = await response.json();
+            const output = document.getElementById('deleteOutput');
+            output.innerHTML = JSON.stringify(data, null, 2);
+        });
+    
+        // Função para renderizar uma tabela com os dados
+        function renderTable(table, data) {
+            table.innerHTML = ''; // Limpa a tabela
+            if (data.length === 0) {
+                table.innerHTML = '<tr><td colspan="3">Nenhum dado encontrado</td></tr>';
+                return;
+            }
+            const headers = Object.keys(data[0]);
+            // Cria a linha de cabeçalho da tabela
+            const headerRow = document.createElement('tr');
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            table.appendChild(headerRow);
+            // Cria as linhas de dados da tabela
+            data.forEach(item => {
+                const tr = document.createElement('tr');
+                headers.forEach(header => {
+                    const td = document.createElement('td');
+                    td.textContent = item[header];
+                    tr.appendChild(td);
+                });
+                table.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
