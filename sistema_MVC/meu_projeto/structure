@@ -1,0 +1,18 @@
+meu_projeto/
+│
+├── controllers/
+│   ├── __init__.py
+│   ├── produto_controller.py
+│   └── usuario_controller.py
+│
+├── models/
+│   ├── __init__.py
+│   ├── produto_model.py
+│   └── usuario_model.py
+│
+├── views/
+│   ├── __init__.py
+│   ├── produto_view.py
+│   └── usuario_view.py
+│
+└── main.py
