@@ -1,0 +1,85 @@
+import sys
+from PyQt5 import uic
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from Tabela_curinga import MainWindow
+import Tela
+class Main(QMainWindow):
+    def __init__(self):
+        super(Main, self).__init__()
+        uic.loadUi('tela.ui', self)  # Carregar o arquivo .ui
+
+        self.btnPlanilha.clicked.connect(self.open_table_window)
+        self.btnCadastro.clicked.connect(self.abrirTelaCadastro)
+
+        self.table_window = None  # Inicializar a variável para armazenar a instância da janela da tabela
+        self.table_window2 = None
+    def abrirTelaCadastro(self):
+        print("aqui abre a tela de cadasttro")
+        if self.table_window2 is None or not self.table_window2.isVisible():
+
+            self.table_window2 = Tela.TelaCadastro()
+            self.table_window2.show()
+
+    def open_table_window(self):
+        if self.table_window is None or not self.table_window.isVisible():
+            data = [
+                ["Placa", "Modelo", "Nome", "Status(ativo)", "Categoria"],
+                ["ABC1234", "Onix", "Alice", "sim", "Carro"],
+                ["DEF5678", "BMW", "Bob", "nao", "Moto"],
+                ["GHI9101", "Sprinter", "Carol", "sim", "Van"],
+                ["JKL1123", "Volvo", "David", "nao", "Ônibus"],
+                ["MNO4567", "Mercedes", "Eva", "sim", "Caminhão"],
+                ["PQR7890", "Fiat 500", "Fabiana", "sim", "Carro"],
+                ["STU1234", "Harley-Davidson Street 750", "George", "sim", "Moto"],
+                ["VWX5678", "Renault Kangoo", "Helena", "sim", "Van"],
+                ["YZA9012", "Scania K360", "Igor", "nao", "Ônibus"],
+                ["BCD3456", "Ford Cargo 2429", "Julia", "sim", "Caminhão"],
+                ["EFG6789", "Chevrolet Cruze", "Karen", "sim", "Carro"],
+                ["HIJ2345", "Yamaha MT-07", "Lucas", "nao", "Moto"],
+                ["KLM4567", "Citroën Jumper", "Mariana", "sim", "Van"],
+                ["NOP8901", "Volvo B450R", "Nelson", "nao", "Ônibus"],
+                ["QRS5678", "Volvo FH16", "Olivia", "sim", "Caminhão"],
+                ["TUV1234", "Hyundai HB20", "Paulo", "sim", "Carro"],
+                ["WXY9012", "Ducati Panigale V4", "Renata", "nao", "Moto"],
+                ["ZAB3456", "Mercedes-Benz Sprinter 415", "Sandra", "sim", "Van"],
+                ["CDE6789", "Marcopolo Paradiso 1800 DD", "Thiago", "nao", "Ônibus"],
+                ["FGH2345", "Scania R500", "Ursula", "sim", "Caminhão"],
+                ["IJK4567", "Toyota Corolla", "Victor", "sim", "Carro"],
+                ["LMN8901", "Kawasaki Ninja ZX-10R", "Wanda", "nao", "Moto"],
+                ["OPQ5678", "Peugeot Partner", "Xavier", "sim", "Van"],
+                ["RST1234", "Irizar i8", "Yasmin", "nao", "Ônibus"],
+                ["UVW9012", "Volvo FH540", "Zeca", "sim", "Caminhão"],
+                ["XYZ3456", "Honda Civic", "Ana", "sim", "Carro"],
+                ["BCD6789", "Suzuki GSX-R1000", "Bruno", "sim", "Moto"],
+                ["EFG2345", "Ford Transit", "Clara", "sim", "Van"],
+                ["HIJ5678", "Man Lion's Coach", "Daniel", "nao", "Ônibus"],
+                ["KLM9012", "Mercedes-Benz Actros", "Elisa", "sim", "Caminhão"],
+                ["NOP3456", "Fiat Palio", "Fernanda", "sim", "Carro"],
+                ["QRS6789", "Triumph Bonneville T100", "Gabriel", "nao", "Moto"],
+                ["TUV2345", "Renault Master", "Heloisa", "sim", "Van"],
+                ["WXY5678", "Neobus Thunder+", "Isaac", "nao", "Ônibus"],
+                ["ZAB9012", "Volvo FH440", "Jéssica", "sim", "Caminhão"],
+                ["CDE3456", "Volkswagen Gol", "Kevin", "sim", "Carro"],
+                ["FGH6789", "BMW S1000RR", "Laura", "nao", "Moto"],
+                ["IJK2345", "Mercedes-Benz Vito", "Miguel", "sim", "Van"],
+                ["LMN5678", "Irizar i6S", "Natália", "nao", "Ônibus"],
+                ["OPQ9012", "Volvo FMX", "Otávio", "sim", "Caminhão"],
+                ["RST3456", "Chevrolet Onix", "Patrícia", "sim", "Carro"],
+                ["UVW6789", "Kawasaki Z900", "Quitéria", "nao", "Moto"],
+                ["XYZ2345", "Fiat Doblo", "Roberto", "sim", "Van"],
+                ["BCD5678", "Neoplan Skyliner", "Sofia", "nao", "Ônibus"],
+                ["EFG9012", "Scania G410", "Tadeu", "sim", "Caminhão"]
+            ]
+
+            self.table_window = MainWindow(data)
+            self.table_window.show()
+        else:
+            print("A janela já está aberta.")
+
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = Main()
+    window.show()
+    sys.exit(app.exec_())
