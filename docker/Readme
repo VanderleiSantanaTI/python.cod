@@ -1,0 +1,54 @@
+# Executando o Projeto com Docker Compose
+
+## Requisitos
+Antes de rodar o projeto, certifique-se de ter os seguintes requisitos instalados no seu sistema:
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+## Estrutura do Projeto
+O projeto está organizado da seguinte maneira:
+
+```
+projeto/docker/
+├── app/
+│   ├── index.py
+│   └── requirements.txt
+├── Dockerfile
+└── docker-compose.yml
+
+```
+
+## Como Rodar o Projeto
+1. **Iniciar o Docker Desktop** (caso esteja no Windows):
+   - No terminal, execute:
+     ```sh
+     net start com.docker.service
+     ```
+
+2. **Acesse a pasta do projeto:**
+   ```sh
+   cd caminho/para/projeto/docker
+   ```
+
+3. **Construir e iniciar os containers:**
+   ```sh
+   docker-compose up --build
+   ```
+
+4. **Acesse a aplicação no navegador:**
+   - Abra: [http://localhost:8501](http://localhost:8501)
+
+## Como Parar o Container
+Para parar a execução do container, utilize o comando:
+```sh
+docker-compose down
+```
+
+## Como Desligar o Docker (Windows)
+Se precisar desligar o Docker após o uso, execute:
+```sh
+net stop com.docker.service
+```
+
+Agora seu projeto está pronto para rodar! 🚀
+
