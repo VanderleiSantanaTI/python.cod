@@ -37,7 +37,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 modelo = LinearRegression()
 modelo.fit(X_train, y_train)
 
-# Função para estimar os tempos de entrega
 def estimar_tempo_entrega():
     # Obter o valor selecionado do setor e pontos
     try:
@@ -76,7 +75,7 @@ def estimar_tempo_entrega():
 
     # Limitar aos 5 melhores tempos
     melhores_resultados = melhores_resultados[:5]
-
+  
     # Limpar o conteúdo atual da tabela
     for item in treeview.get_children():
         treeview.delete(item)
@@ -94,7 +93,9 @@ def estimar_tempo_entrega():
     
     # Criar gráfico de barras
     fig, ax = plt.subplots(figsize=(5, 4))
-    ax.bar(motoristas[0:5], tempos[0:5], color='skyblue')
+    
+    # Garantir que os motoristas e os tempos estejam na mesma ordem (do menor para o maior tempo)
+    ax.bar(motoristas, tempos, color='skyblue')
     ax.set_xlabel('Motoristas')
     ax.set_ylabel('Tempo Estimado (minutos)')
     ax.set_title(f'Tempos Estimados para o Setor {setor_escolhido}')
@@ -144,6 +145,9 @@ treeview.column("Tempo Estimado", width=150)
 # Frame para o gráfico
 frame_grafico = tk.Frame(root)
 frame_grafico.pack(pady=10, fill=tk.BOTH, expand=True)
+
+# Configurar o comportamento de fechamento
+root.protocol("WM_DELETE_WINDOW", root.quit)
 
 # Iniciar a interface gráfica
 root.mainloop()
