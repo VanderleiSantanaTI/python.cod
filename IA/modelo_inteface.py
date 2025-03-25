@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # Carregar os dados do arquivo CSV
-df = pd.read_csv('IA/dados_entrega.csv', sep=';')
+df = pd.read_csv('dados_entrega.csv', sep=';')
 
 # Codificar variáveis categóricas 'Motorista', 'Veículo' e 'Setor' com LabelEncoder
 encoder_motorista = LabelEncoder()
