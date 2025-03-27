@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import LabelEncoder
 
 # Carregar os dados do arquivo CSV
-df = pd.read_csv('IA/dados_entrega.csv', sep=';')
+df = pd.read_csv('dados_entrega.csv', sep=';')
 
 # Codificar variáveis categóricas 'Motorista', 'Veículo' e 'Setor' com LabelEncoder
 encoder_motorista = LabelEncoder()
@@ -32,13 +32,13 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 modelo = LinearRegression()
 modelo.fit(X_train, y_train)
 
-def estimar_tempo_entrega(setor_escolhido, pontos_escolhidos):
-    # Filtrar dados para o setor escolhido
-    dados_filtrados = df[df['Setor'] == setor_escolhido].copy()
+def estimar_tempo_entrega(setor_escolhido, tipo_veiculo_escolhido, pontos_escolhidos):
+    # Filtrar dados para o setor e tipo de veículo escolhido
+    dados_filtrados = df[(df['Setor'] == setor_escolhido) & (df['Veículo'] == tipo_veiculo_escolhido)].copy()
 
     # Verificar se o conjunto de dados filtrado está vazio
     if dados_filtrados.empty:
-        print(f"Não há dados para o setor {setor_escolhido}.")
+        print(f"Não há dados para o setor {setor_escolhido} e veículo {tipo_veiculo_escolhido}.")
         return
 
     # Criar uma lista para armazenar os resultados
@@ -61,12 +61,12 @@ def estimar_tempo_entrega(setor_escolhido, pontos_escolhidos):
     melhores_resultados = sorted(resultados, key=lambda x: x[2])[:5]
 
     # Exibir os 5 menores tempos estimados
-    print(f"\nOs 5 melhores tempos estimados para o setor {setor_escolhido} com {pontos_escolhidos} pontos:")
+    print(f"\nOs 5 melhores tempos estimados para o setor {setor_escolhido} com o veículo {tipo_veiculo_escolhido} e {pontos_escolhidos} pontos:")
     for motorista, veiculo, tempo_estimado in melhores_resultados:
         print(f"Tempo estimado para o motorista {motorista}, veículo {veiculo}: {tempo_estimado:.2f} minutos")
 
-# Exemplo de uso: Estimar os 5 melhores tempos para o setor 105 com 5 pontos
-setor_escolhido = 106
+# Exemplo de uso: Estimar os 5 melhores tempos para o setor 106 com o tipo de veículo 'Moto' e 50 pontos
+setor_escolhido = 105
+tipo_veiculo_escolhido = 'carro'  # Pode ser 'Moto', 'Carro', 'Van' ou 'Caminhão'
 pontos_escolhidos = 50
-estimar_tempo_entrega(setor_escolhido, pontos_escolhidos)
-
+estimar_tempo_entrega(setor_escolhido, tipo_veiculo_escolhido, pontos_escolhidos)
