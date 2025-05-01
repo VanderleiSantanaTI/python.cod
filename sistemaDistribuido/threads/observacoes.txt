@@ -1,0 +1,6 @@
+Em termo de código entre trhead e processos tem a mesma estrutura e faz a separação iguais, a diferença
+é que no processo é compartilhada uma variável e no trhead nao precisa, isso teoricamente deixa 
+em maioria das vezes o trhead mais rapido porque ela exige pouco processamento.
+
+o Python por ser uma liguagem interpletada ele acaba não utilizando o uso dos trhead com muita eficiencia
+e se torna até mais lento que o multprocessos.
