@@ -1,5 +1,5 @@
 import socket
-HOST = '' 
+HOST = '10.130.71.22' 
 PORT = 5000 
 tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 orig = (HOST, PORT)
