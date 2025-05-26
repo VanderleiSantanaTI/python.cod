@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Tráfego</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        .status-entregue {
+            background-color: #d4edda;
+        }
+        .ui-autocomplete {
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 9999;
+        }
+        .ui-menu-item {
+            padding: 5px;
+            cursor: pointer;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .footer h5 {
+            font-weight: 600;
+        }
+        
+        .footer .bi {
+            margin-right: 8px;
+        }
+        
+        .footer a {
+            color: #6c757d;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: #0d6efd;
+        }
+        
+        .footer .bi {
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 767.98px) {
+            .footer {
+                text-align: center;
+            }
+            
+            .footer ul {
+                display: inline-block;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Sistema de Tráfego</h1>
+        
+        <!-- Formulário para adicionar pontos de entrega -->
+        <form id="entregaForm">
+            <div class="mb-3">
+                <label for="endereco" class="form-label">Endereço</label>
+                <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Digite o endereço" required>
+            </div>
+            <div class="mb-3" id="numeroDiv" style="display: none;">
+                <label for="numero" class="form-label">Número</label>
+                <input type="text" class="form-control" id="numero" name="numero" placeholder="Digite o número">
+            </div>
+            <button type="button" class="btn btn-primary" id="addPontoBtn">Adicionar Ponto</button>
+        </form>
+
+        <!-- Contadores -->
+        <div class="alert alert-info mt-3">
+            <div class="row">
+                <div class="col-md-4">Total de Endereços: <span id="totalEnderecos">0</span></div>
+                <div class="col-md-4">Endereços Entregues: <span id="enderecosEntregues">0</span></div>
+                <div class="col-md-4">Endereços Restantes: <span id="enderecosRestantes">0</span></div>
+            </div>
+        </div>
+
+        <!-- Tabela para mostrar os pontos de entrega -->
+        <table class="table mt-4" id="tabelaPontos">
+            <thead>
+                <tr>
+                    <th scope="col">Endereço</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Os pontos de entrega serão adicionados aqui dinamicamente -->
+            </tbody>
+        </table>
+
+        <!-- Botão para enviar os pontos para o servidor -->
+        <button type="button" class="btn btn-success mt-3" id="executarBtn">Executar Roteirização</button>
+
+        <!-- Div para o mapa -->
+        <div id="map" class="mt-4 mb-5"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-primary mb-3">Sistema de Tráfego</h5>
+                    <p class="text-muted">
+                        Otimize suas entregas com nossa solução inteligente de roteirização.
+                        Economize tempo e recursos com rotas eficientes.
+                    </p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-primary mb-3">Recursos</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check2-circle"></i> Autocompletar de endereços</li>
+                        <li class="mb-2"><i class="bi bi-check2-circle"></i> Gestão de entregas</li>
+                        <li class="mb-2"><i class="bi bi-check2-circle"></i> Visualização em mapa</li>
+                        <li class="mb-2"><i class="bi bi-check2-circle"></i> Roteirização inteligente</li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-primary mb-3">Contato</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-envelope"></i> contato@sistemadetrafego.com</li>
+                        <li class="mb-2"><i class="bi bi-telephone"></i> (11) 9999-9999</li>
+                        <li class="mb-2"><i class="bi bi-geo-alt"></i> São Paulo, SP</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; 2024 Sistema de Tráfego. Todos os direitos reservados.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-decoration-none me-3"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-decoration-none me-3"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-decoration-none me-3"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="text-decoration-none"><i class="bi bi-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Adicionar CSS do Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let pontosEntrega = [];  // Array para armazenar os pontos de entrega
+        let posicaoAtual = {};   // Objeto para armazenar a posição atual
+        let enderecoSelecionado = null;  // Armazenar componentes do endereço selecionado
+        
+        // Configurar autocomplete do endereço
+        $('#endereco').autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: 'https://nominatim.openstreetmap.org/search',
+                    dataType: 'json',
+                    data: {
+                        q: request.term,
+                        format: 'json',
+                        limit: 5,
+                        addressdetails: 1
+                    },
+                    success: function(data) {
+                        response(data.map(function(item) {
+                            return {
+                                label: item.display_name,
+                                value: item.display_name,
+                                address: item.address
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 3,
+            delay: 500,
+            select: function(event, ui) {
+                const addr = ui.item.address;
+                
+                // Montar endereço formatado
+                const rua = addr.road || addr.street || '';
+                const bairro = addr.suburb || addr.neighbourhood || '';
+                const cidade = addr.city || addr.town || addr.village || '';
+                
+                enderecoSelecionado = {
+                    rua: rua,
+                    bairro: bairro,
+                    cidade: cidade
+                };
+
+                // Mostrar endereço formatado no campo
+                const enderecoFormatado = `${rua} - ${bairro}, ${cidade}`.trim();
+                $('#endereco').val(enderecoFormatado);
+
+                // Mostrar campo de número
+                $('#numeroDiv').show();
+                $('#numero').focus();
+
+                return false;
+            }
+        });
+
+        // Função para atualizar os contadores
+        function atualizarContadores() {
+            const total = pontosEntrega.length;
+            const entregues = pontosEntrega.filter(p => p.status === 'entregue').length;
+            const restantes = total - entregues;
+
+            $('#totalEnderecos').text(total);
+            $('#enderecosEntregues').text(entregues);
+            $('#enderecosRestantes').text(restantes);
+        }
+
+        // Função para adicionar um novo ponto de entrega
+        function adicionarPonto() {
+            if (!enderecoSelecionado) {
+                alert('Por favor, selecione um endereço válido da lista de sugestões.');
+                return;
+            }
+
+            const numero = $('#numero').val().trim();
+            if (!numero) {
+                alert('Por favor, digite o número do endereço.');
+                return;
+            }
+
+            // Montar endereço completo
+            const enderecoCompleto = `${enderecoSelecionado.rua}, ${numero} - ${enderecoSelecionado.bairro}, ${enderecoSelecionado.cidade}`;
+
+            // Adicionar o ponto à lista com status
+            pontosEntrega.push({
+                endereco: enderecoCompleto,
+                status: 'pendente'
+            });
+
+            // Atualizar a tabela
+            atualizarTabela();
+
+            // Limpar os campos
+            $('#endereco').val('');
+            $('#numero').val('');
+            $('#numeroDiv').hide();
+            enderecoSelecionado = null;
+        }
+
+        // Prevenir submissão do formulário e adicionar ponto quando pressionar Enter
+        $('#entregaForm').on('submit', function(e) {
+            e.preventDefault();
+            adicionarPonto();
+        });
+
+        // Adicionar ponto quando clicar no botão
+        $('#addPontoBtn').on('click', function(e) {
+            e.preventDefault();
+            adicionarPonto();
+        });
+
+        // Permitir submissão do formulário quando pressionar Enter no campo de número
+        $('#numero').on('keypress', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                adicionarPonto();
+            }
+        });
+
+        // Função para atualizar a tabela inteira
+        function atualizarTabela() {
+            $('#tabelaPontos tbody').empty();
+            pontosEntrega.forEach((ponto, index) => {
+                const statusClass = ponto.status === 'entregue' ? 'status-entregue' : '';
+                const statusBadge = ponto.status === 'entregue' ? 
+                    '<span class="badge bg-success">Entregue</span>' : 
+                    '<span class="badge bg-warning">Pendente</span>';
+
+                $('#tabelaPontos tbody').append(`
+                    <tr class="${statusClass}" data-index="${index}">
+                        <td class="endereco-texto">${ponto.endereco}</td>
+                        <td>${statusBadge}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm editarBtn">Editar</button>
+                            <button class="btn btn-${ponto.status === 'entregue' ? 'warning' : 'success'} btn-sm statusBtn">
+                                ${ponto.status === 'entregue' ? 'Desfazer Entrega' : 'Marcar Entregue'}
+                            </button>
+                            <button class="btn btn-danger btn-sm removerBtn">Remover</button>
+                        </td>
+                    </tr>
+                `);
+            });
+            atualizarContadores();
+        }
+
+        // Remover ponto da tabela
+        $('#tabelaPontos').on('click', '.removerBtn', function() {
+            const index = $(this).closest('tr').data('index');
+            pontosEntrega.splice(index, 1);
+            atualizarTabela();
+        });
+
+        // Editar endereço
+        $('#tabelaPontos').on('click', '.editarBtn', function() {
+            const tr = $(this).closest('tr');
+            const index = tr.data('index');
+            const enderecoAtual = pontosEntrega[index].endereco;
+            
+            const novoEndereco = prompt('Editar endereço:', enderecoAtual);
+            if (novoEndereco && novoEndereco.trim() !== '') {
+                pontosEntrega[index].endereco = novoEndereco.trim();
+                atualizarTabela();
+            }
+        });
+
+        // Alternar status de entrega
+        $('#tabelaPontos').on('click', '.statusBtn', function() {
+            const index = $(this).closest('tr').data('index');
+            pontosEntrega[index].status = pontosEntrega[index].status === 'entregue' ? 'pendente' : 'entregue';
+            atualizarTabela();
+            // Atualizar o mapa após mudar o status
+            atualizarMapa();
+        });
+
+        // Função para atualizar o mapa
+        function atualizarMapa() {
+            if (pontosEntrega.length === 0) return;
+
+            if (!posicaoAtual.lat || !posicaoAtual.lon) {
+                alert("Por favor, aguarde a obtenção da posição atual.");
+                return;
+            }
+            
+            const dados = {
+                pontos: pontosEntrega
+                    .filter(p => p.status === 'pendente')  // Filtrar apenas pontos pendentes
+                    .map(p => p.endereco),
+                posicao_atual: posicaoAtual
+            };
+
+            console.log('Atualizando mapa com dados:', dados);
+
+            $.ajax({
+                url: 'http://127.0.0.1:8000/pontos_entrega',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(dados),
+                success: function(response) {
+                    console.log('Resposta do servidor:', response);
+                    $('#map').html(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erro ao atualizar o mapa:', status, error);
+                    alert('Erro ao atualizar o mapa.');
+                }
+            });
+        }
+
+        // Função para obter a posição atual
+        function obterPosicaoAtual() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    posicaoAtual = {
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude
+                    };
+                    console.log("Posição Atual:", posicaoAtual);
+                }, function(error) {
+                    alert("Por favor, obtenha sua posição atual primeiro!");
+                    console.error(error);
+                });
+            } else {
+                alert("Geolocalização não é suportada neste navegador.");
+            }
+        }
+
+        // Chama a função para obter a posição ao carregar a página
+        obterPosicaoAtual();
+
+        // Enviar os pontos de entrega para o servidor
+        $('#executarBtn').on('click', function() {
+            if (pontosEntrega.length === 0) {
+                alert('Por favor, adicione ao menos um ponto de entrega!');
+                return;
+            }
+
+            atualizarMapa();  // Usar a nova função para atualizar o mapa
+        });
+    </script>
+</body>
+</html>
