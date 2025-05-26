@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Entregas</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <h2>Cadastro de Entregas</h2>
+  
+  <form id="entregaForm">
+    <label>Motorista:</label>
+      <select id="motorista" required>
+      <option value="">Selecione</option>
+      <option value="Patrik">Patrik</option>
+      <option value="Kevin">Kevin</option>
+      <option value="Danilo">Danilo</option>
+      <option value="Vanderlei">Vaderlei</option>
+      
+    </select>
+
+    <label>Veículo:</label>
+    <select id="veiculo" required>
+      <option value="">Selecione</option>
+      <option value="Carro">Carro</option>
+      <option value="Moto">Moto</option>
+      <option value="Van">Van</option>
+      <option value="Caminhão">Caminhão</option>
+    </select>
+
+    <label>Setor:</label>
+    <select id="setor" required></select>
+
+    <label>Ponto de Entrega:</label>
+    <input type="number" id="ponto" required>
+
+    <label>Tempo de Entrega (min):</label>
+    <input type="number" id="tempo" required>
+
+    <button type="submit">Salvar</button>
+  </form>
+
+  <script>
+    // Preenche setores de 101 a 130
+    const setorSelect = document.getElementById('setor');
+
+    for (let i = 100; i <= 130; i++) {
+      if (i === 100){
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = 'Selecione';
+        setorSelect.appendChild(opt);
+        continue; 
+      }
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = i;
+      setorSelect.appendChild(opt);
+    }
+
+    const form = document.getElementById('entregaForm');
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const data = {
+        motorista: document.getElementById('motorista').value.trim(),
+        veiculo: document.getElementById('veiculo').value,
+        setor: document.getElementById('setor').value,
+        ponto: document.getElementById('ponto').value.trim(),
+        tempo: document.getElementById('tempo').value.trim()
+      };
+
+      const response = await fetch('/salvar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        alert('Entrega salva com sucesso!');
+        form.reset();
+      } else {
+        alert('Erro ao salvar entrega!');
+      }
+    });
+  </script>
+</body>
+</html>
