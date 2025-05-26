@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # Carregar os dados do arquivo CSV
-df = pd.read_csv('dados_entrega.csv', sep=';')
+df = pd.read_csv('entregas.csv', sep=',')
 
 def converter_minutos_em_horas(minutos):
     # Separar a parte inteira (minutos) e a parte decimal (fração de minutos)

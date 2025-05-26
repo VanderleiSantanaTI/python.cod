@@ -11,7 +11,7 @@ app = FastAPI()
 
 # Serve a pasta 'images' como uma pasta estática pra arquivos de imagem personalizados
 # (como ícones do Folium)
-app.mount("/static", StaticFiles(directory="images"), name="static")
+# app.mount("/static", StaticFiles(directory="images"), name="static")
 
 # Criação do ícone com o caminho correto
 # icon = folium.CustomIcon(icon_image='http://127.0.0.1:8000/static/point.png', icon_size=(30, 30))
