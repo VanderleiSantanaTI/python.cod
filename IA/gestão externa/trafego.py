@@ -1,3 +1,4 @@
+from fastapi.responses import HTMLResponse
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -5,7 +6,9 @@ from pydantic import BaseModel
 from geopy.geocoders import Nominatim
 import folium
 from fastapi.responses import HTMLResponse
-
+import threading
+import webbrowser
+import time
 # Inicializa o FastAPI
 app = FastAPI()
 
@@ -28,6 +31,17 @@ app.add_middleware(
 
 # Inicializa o geolocalizador
 geolocator = Nominatim(user_agent="sistema_trafego")
+
+
+@app.get("/")
+async def index():
+    with open("templates/index.html", encoding="utf-8") as f:
+        return f.read()
+
+
+def abrir_navegador():
+    time.sleep(1)
+    webbrowser.open_new("http://127.0.0.1:8000/")
 
 # Função para geocodificar o endereço
 def endereco_para_coordenada(endereco: str):
@@ -67,6 +81,8 @@ async def pontos_entrega(pontos: PontosEntrega):
     # Retorna o mapa gerado
     return mapa._repr_html_()
 
+
 if __name__ == "__main__":
+    threading.Thread(target=abrir_navegador).start()
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
